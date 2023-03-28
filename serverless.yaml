@@ -1,0 +1,22 @@
+{
+  service: "aws",
+  frameworkVersion: "3",
+
+  useDotenv: true,
+
+  package: { excludeDevDependencies: true },
+
+  provider: { name: "aws", runtime: "nodejs16.x" },
+
+  plugins: ["serverless-plugin-typescript", "serverless-dotenv-plugin"],
+
+  functions:
+    {
+      echo:
+        {
+          name: "maya-smart-bot",
+          handler: "src/index.handler",
+          events: [{ httpApi: { path: "/maya-smart-bot", method: "post" } }],
+        },
+    },
+}

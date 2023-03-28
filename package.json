@@ -1,0 +1,26 @@
+{
+  "name": "maya-smart-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "serverless": "serverless",
+    "release": "serverless deploy",
+    "purge": "serverless remove",
+    "set-webhook": "telegraf -m setWebhook"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "openai": "^3.2.1",
+    "serverless-http": "^3.2.0",
+    "telegraf": "^4.12.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.10",
+    "serverless": "^3.29.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-plugin-typescript": "^2.1.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+  }
+}
