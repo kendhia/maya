@@ -16,6 +16,7 @@
         {
           name: "maya-smart-bot",
           handler: "src/index.handler",
+          timeout: 30,
           events: [{ httpApi: { path: "/maya-smart-bot", method: "post" } }],
         },
     },
