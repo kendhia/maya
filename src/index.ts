@@ -1,6 +1,6 @@
 import * as http from "serverless-http";
 
-import { Telegraf } from "telegraf";
+import { Telegraf, Markup } from "telegraf";
 import { message } from "telegraf/filters";
 
 import * as dotenv from "dotenv";
@@ -22,6 +22,10 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const bot = new Telegraf(botToken);
 
+const keyboard = Markup.inlineKeyboard([
+  Markup.button.url("❤️", "https://kendhia.me"),
+]);
+
 bot.on(message("text"), async (ctx) => {
   const inputText = ctx.message.text;
   try {
@@ -36,13 +40,14 @@ bot.on(message("text"), async (ctx) => {
     });
     const response =
       completion.data.choices[0].message?.content || "No response";
-    ctx.reply(response);
+    ctx.reply(response, keyboard);
   } catch (error) {
     ctx.reply(
       "An error occurred while processing your request. Please try again later."
     );
   }
 });
+
 
 bot.catch((err, ctx) => {
   console.error(`Error for ${ctx.updateType}`, err);

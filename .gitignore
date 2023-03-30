@@ -11,3 +11,4 @@ echo.js
 .env
 
 *.log
+*.build
