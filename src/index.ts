@@ -36,12 +36,7 @@ bot.on(message("text"), async (ctx) => {
   const inputText = ctx.message.text;
   try {
     const parsedText = parseMessage(inputText);
-    const messages: ChatCompletionRequestMessage[] = [
-      {
-        role: ChatCompletionRequestMessageRoleEnum.User,
-        content: parsedText.content,
-      },
-    ];
+    const messages: ChatCompletionRequestMessage[] = [];
 
     if (parsedText.system) {
       messages.push({
@@ -50,12 +45,21 @@ bot.on(message("text"), async (ctx) => {
       });
     }
 
+    messages.push({
+      role: ChatCompletionRequestMessageRoleEnum.User,
+      content: parsedText.content,
+    });
+
+    console.log(`messages: ${JSON.stringify(messages)}`);
+
     const completion = await openai.createChatCompletion({
       model: "gpt-4",
       messages,
     });
     const response =
       completion.data.choices[0].message?.content || "No response";
+
+    console.log(`response: ${response}`);
     ctx.reply(response, keyboard);
   } catch (error) {
     ctx.reply(
