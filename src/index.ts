@@ -4,7 +4,13 @@ import { Telegraf, Markup } from "telegraf";
 import { message } from "telegraf/filters";
 
 import * as dotenv from "dotenv";
-import { Configuration, OpenAIApi } from "openai";
+import {
+  ChatCompletionRequestMessage,
+  ChatCompletionRequestMessageRoleEnum,
+  Configuration,
+  OpenAIApi,
+} from "openai";
+import { parseMessage } from "./parser";
 
 dotenv.config();
 
@@ -29,14 +35,24 @@ const keyboard = Markup.inlineKeyboard([
 bot.on(message("text"), async (ctx) => {
   const inputText = ctx.message.text;
   try {
+    const parsedText = parseMessage(inputText);
+    const messages: ChatCompletionRequestMessage[] = [
+      {
+        role: ChatCompletionRequestMessageRoleEnum.User,
+        content: parsedText.content,
+      },
+    ];
+
+    if (parsedText.system) {
+      messages.push({
+        role: ChatCompletionRequestMessageRoleEnum.System,
+        content: parsedText.system,
+      });
+    }
+
     const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo-0301",
-      messages: [
-        {
-          role: "user",
-          content: inputText,
-        },
-      ],
+      model: "gpt-4",
+      messages,
     });
     const response =
       completion.data.choices[0].message?.content || "No response";
@@ -47,7 +63,6 @@ bot.on(message("text"), async (ctx) => {
     );
   }
 });
-
 
 bot.catch((err, ctx) => {
   console.error(`Error for ${ctx.updateType}`, err);
