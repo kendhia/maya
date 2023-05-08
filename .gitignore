@@ -12,3 +12,4 @@ echo.js
 
 *.log
 *.build
+*._DS_STORE
